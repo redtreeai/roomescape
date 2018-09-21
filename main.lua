@@ -6,6 +6,13 @@ function love.load()
     brief_img = love.graphics.newImage("images/brief.jpg")
     --故事背景图
     title_sound = love.audio.newSource("sounds/title.wav", "stream")
+    toilet_sound = love.audio.newSource("sounds/dian.mp3", "stream")
+    brief_sound = love.audio.newSource("sounds/ghost.wav", "stream")
+    liangjian_sound = love.audio.newSource("sounds/liangjian.mp3", "stream")
+    yangtai_sound = love.audio.newSource("sounds/miao.mp3", "stream")
+    over_sound = love.audio.newSource("sounds/winner.mp3", "stream")
+    tips_sound = love.audio.newSource("sounds/tips.mp3", "stream")
+
     --title北京音乐
     black_img = love.graphics.newImage("images/black.jpg")
     --黑背景
@@ -23,6 +30,7 @@ function love.load()
     --箭头右
     tv_img = love.graphics.newImage("images/tv.jpg")
     --亮剑剧照
+    over_img = love.graphics.newImage("images/over.jpg")
 
     --tips素材
     tips0 = love.graphics.newImage("images/tips/tips0.jpg")
@@ -51,7 +59,15 @@ function love.load()
     tips24= love.graphics.newImage("images/tips/tips24.jpg")
     tips25= love.graphics.newImage("images/tips/tips25.jpg")
     tips26= love.graphics.newImage("images/tips/tips26.jpg")
+    tips27= love.graphics.newImage("images/tips/tips27.jpg")
+    tips28= love.graphics.newImage("images/tips/tips28.jpg")
     tips29= love.graphics.newImage("images/tips/tips29.jpg")
+    tips30= love.graphics.newImage("images/tips/tips30.jpg")
+    tips31= love.graphics.newImage("images/tips/tips31.jpg")
+    tips32= love.graphics.newImage("images/tips/tips32.jpg")
+    tips33= love.graphics.newImage("images/tips/tips33.jpg")
+    tips34= love.graphics.newImage("images/tips/tips34.jpg")
+
 
     --纸团交互
     tips10 = love.graphics.newImage("images/tips/tips10.jpg")
@@ -108,6 +124,7 @@ function love.load()
     --是否进去过厕所
     is_xiaoyugan_taked =false
     is_cd_taked=false
+    is_camara_taked =false
 
     cur_scene = 'title'
     --当前场景
@@ -136,7 +153,17 @@ function love.load()
     taotao_using=false
     xiaoyugan_checking =false
     xiaoyugan_using = false
-
+    ipad_checking = false
+    ipad_using =false
+    cd_checking =false
+    cd_using = false
+    cd_in =false
+    camara_checking =false
+    camara_using =false
+    chengyigan_checking =false
+    chengyigan_using=false
+    zhaopian_check=false
+    zhaopian_using =false
 
     cur_mouse_x = 0
     cur_mouse_y = 0
@@ -151,14 +178,104 @@ function love.update()
     cur_mouse_x = love.mouse.getX()
     cur_mouse_y = love.mouse.getY()
 
-    print(cur_mouse_x, cur_mouse_y)
+    --print(cur_mouse_x, cur_mouse_y)
+    --print(item_index)
 
     if (love.mouse.isDown('2') or istip==true) then
        --点击右键取消物品拾取状态
         yaoshi1_using =false
         yaoshi2_using = false
         shoutao_using = false
+        ipad_using =false
+        xiaoyugan_using =false
+        chengyigan_using = false
+        camara_using =false
+        cd_using =false
     end
+
+    if (cur_scene=='over')then
+        if (love.mouse.isDown('1')) then
+              if (cur_mouse_x >418 and cur_mouse_x<577 and cur_mouse_y>406 and cur_mouse_y<449 )then
+                 --再来一局
+                  --重置数据
+                  cur_scene='brief'
+                  --场景控制
+    --鼠标按下时间
+    click_time = nil
+    ctip = nil
+    --当前提示对象
+    istip = false
+    --是否处于提示状态
+    istvopen = false
+    --电视机是否开启
+    is_paper_taked = false
+    --纸张是否被捡走
+    is_yaoshi2_taked = false
+    --金钥匙是否被捡走
+    is_chengyigan_taked = false
+    --撑衣干是否被捡走
+    is_taotao_taked= false
+    --套套是否被取走
+    is_shoutao_taked= false
+    --手套是否被取走
+    is_ipad_taked =false
+    --ipad
+    is_toilet_open =false
+    --是否进去过厕所
+    is_xiaoyugan_taked =false
+    is_cd_taked=false
+    is_camara_taked =false
+
+    cur_scene = 'title'
+    --当前场景
+    brfy = 500
+    --蛋幕起始高度
+    items = {}
+    --获得道具列表
+    items_len = 0
+    --道具数量
+
+    item_index = 0
+    --当前物品栏列表初始位置
+    click_item_name = ''
+    --当前使用的物品名
+    --道具交互
+    paper_checking = false
+    --是否正在校验paper
+    get_yaoshi1 = false
+    --以获得1号钥匙 （厕所的）
+    yaoshi1_checking = false
+    yaoshi1_using =false
+    yaoshi2_using = false
+    taotao_checking = false
+    shoutao_checking =false
+    shoutao_using = false
+    taotao_using=false
+    xiaoyugan_checking =false
+    xiaoyugan_using = false
+    ipad_checking = false
+    ipad_using =false
+    cd_checking =false
+    cd_using = false
+    cd_in =false
+    camara_checking =false
+    camara_using =false
+    chengyigan_checking =false
+    chengyigan_using=false
+    zhaopian_check=false
+    zhaopian_using =false
+
+    cur_mouse_x = 0
+    cur_mouse_y = 0
+              end
+              if (cur_mouse_x >419 and cur_mouse_x<581 and cur_mouse_y>490 and cur_mouse_y<533 )then
+                  cur_scene='exit'
+                 --退出游戏
+              end
+
+        end
+    end
+
 
     if (cur_scene == 'room') then
         --以下为鼠标交互事件
@@ -185,10 +302,15 @@ function love.update()
                 elseif(cur_mouse_x >673 and cur_mouse_x<716 and cur_mouse_y>299 and cur_mouse_y<349)
                     --充电器
                 then
+                    if (ipad_using ==true)then
+                         ctip = tips28
+                        istip = true
+                        love.timer.sleep(0.5)
+                     else
                     ctip = tips2
                     istip = true
                     love.timer.sleep(0.5)
-
+                    end
                 elseif(cur_mouse_x >631 and cur_mouse_x<762 and cur_mouse_y>374 and cur_mouse_y<413 and is_ipad_taked ==false)
                     --左边抽屉
                 then
@@ -222,9 +344,16 @@ function love.update()
                 elseif(cur_mouse_x >15 and cur_mouse_x<47 and cur_mouse_y>46 and cur_mouse_y<123)
                     --人脸识别锁
                 then
-                    ctip = tips8
+                    if (zhaopian_using==false)then
+                         ctip = tips8
                     istip = true
                     love.timer.sleep(0.5)
+                    else
+                        --通关
+                        zhaopian_using = false
+                        cur_scene ='over'
+                        end
+
                 elseif(cur_mouse_x >0 and cur_mouse_x<111 and cur_mouse_y>0 and cur_mouse_y<177)
                     --宿舍门
                 then
@@ -234,15 +363,54 @@ function love.update()
                 elseif(cur_mouse_x >480 and cur_mouse_x<682 and cur_mouse_y>28 and cur_mouse_y<112)
                     --sony电视
                 then
-                    ctip = tips5
+                    if (istvopen==true)then
+                       if(camara_using ==true and cd_in==true)then
+                           ctip = tips34
+                        istip = true
+                        love.timer.sleep(0.5)
+                        table.insert(items,'zhaopian')
+                    --给数组添加元素
+                        items_len = table_leng(items)
+                           carama_using=false
+                       elseif (camara_using ==true) then
+                            ctip = tips33
+                        istip = true
+                        love.timer.sleep(0.5)
+                           else
+                       end
+                    else
+                          ctip = tips5
                     istip = true
                     love.timer.sleep(0.5)
+                    end
+
+                elseif((cur_mouse_x >480 and cur_mouse_x<682 and cur_mouse_y>28 and cur_mouse_y<112)==false and camara_using==true)
+                    --不拍电视
+                then
+                    ctip = tips33
+                    istip = true
+                    love.timer.sleep(0.5)
+
+
                 elseif(cur_mouse_x >686 and cur_mouse_x<791 and cur_mouse_y>89 and cur_mouse_y<117)
                     --VCD机
                 then
-                    ctip = tips6
-                    istip = true
-                    love.timer.sleep(0.5)
+                    if (cd_in==true) then
+                        ctip = tips31
+                        istip = true
+                        love.timer.sleep(0.5)
+                    else
+                        if (cd_using ==true)then
+                            ctip = tips31
+                            istip = true
+                            love.timer.sleep(0.5)
+                            cd_in=true
+                        else
+                         ctip = tips6
+                        istip = true
+                        love.timer.sleep(0.5)
+                        end
+                        end
                 elseif(cur_mouse_x >468 and cur_mouse_x<475 and cur_mouse_y>49 and cur_mouse_y<54 and istvopen==false)
                     --打开电视
                 then
@@ -278,9 +446,7 @@ function love.update()
                         end
                     else
                         cur_scene='toilet' --切换到厕所场景
-
                     end
-
                 end
             else
                    if (paper_checking ==true and cur_mouse_x >448 and cur_mouse_x<490 and cur_mouse_y>443 and cur_mouse_y<466  and get_yaoshi1 == false)then
@@ -320,10 +486,41 @@ function love.update()
                     shoutao_checking = false
                     shoutao_using = true
                     love.timer.sleep(0.5)
-                   elseif (xiaoyugan_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                  elseif (xiaoyugan_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
                     --使用鱼干
                     istip = false
                     xiaoyugan_using = true
+                    xiaoyugan_checking =false
+                    love.timer.sleep(0.5)
+                    elseif (ipad_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用ipad
+                    istip = false
+                    ipad_using = true
+                    ipad_checking=false
+                    love.timer.sleep(0.5)
+                  elseif (cd_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用CD
+                    istip = false
+                    cd_using = true
+                    cd_checking=false
+                    love.timer.sleep(0.5)
+                   elseif (chengyigan_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用撑衣干
+                    istip = false
+                    chengyigan_using = true
+                    chengyigan_checking =false
+                    love.timer.sleep(0.5)
+                   elseif (camara_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用照相机
+                    istip = false
+                    camara_using = true
+                    camara_checking =false
+                    love.timer.sleep(0.5)
+                     elseif (zhaopian_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用照相机
+                    istip = false
+                    zhaopian_using = true
+                    zhaopian_checking =false
                     love.timer.sleep(0.5)
                    else
 
@@ -358,6 +555,28 @@ function love.update()
                              love.timer.sleep(0.5)
                          end
                      end
+                      elseif (cur_mouse_x >192 and cur_mouse_x<252 and cur_mouse_y>20 and cur_mouse_y<80)then
+                     if(is_camara_taked==false) then
+                         if(chengyigan_using==false) then
+                             ctip = tips15
+                            istip = true
+                            love.timer.sleep(0.5)
+                         else
+                             ctip = tips32
+                            istip = true
+                            is_camara_taked=true
+                            table.insert(items,'camara')
+                            --给数组添加元素
+                            items_len = table_leng(items)
+                            chengyigan_checking=false
+                            chengyigan_using=false
+                            love.timer.sleep(0.5)
+                             end
+                     end
+                     elseif(camara_using ==true)then
+                        ctip = tips33
+                        istip = true
+                        love.timer.sleep(0.5)
                 end
             else
 
@@ -402,6 +621,37 @@ function love.update()
                     --使用鱼干
                     istip = false
                     xiaoyugan_using = true
+                    xiaoyugan_checking =false
+                    love.timer.sleep(0.5)
+                    elseif (ipad_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用ipad
+                    istip = false
+                    ipad_using = true
+                    ipad_checking=false
+                    love.timer.sleep(0.5)
+                  elseif (cd_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用CD
+                    istip = false
+                    cd_using = true
+                    cd_checking=false
+                    love.timer.sleep(0.5)
+                   elseif (chengyigan_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用撑衣干
+                    istip = false
+                    chengyigan_using = true
+                    chengyigan_checking =false
+                    love.timer.sleep(0.5)
+                   elseif (camara_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用照相机
+                    istip = false
+                    camara_using = true
+                    camara_checking =false
+                    love.timer.sleep(0.5)
+                   elseif (zhaopian_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用照相机
+                    istip = false
+                    zhaopian_using = true
+                    zhaopian_checking =false
                     love.timer.sleep(0.5)
                    else
 
@@ -439,11 +689,15 @@ function love.update()
                     istip = true
                     xiaoyugan_using=false
                     love.timer.sleep(0.5)
-                        end
+                    end
+                 elseif(camara_using ==true)then
+                        ctip = tips33
+                        istip = true
+                        love.timer.sleep(0.5)
 
                 end
             else
-                   if (paper_checking ==true and cur_mouse_x >448 and cur_mouse_x<490 and cur_mouse_y>443 and cur_mouse_y<466  and get_yaoshi1 == false)then
+                  if (paper_checking ==true and cur_mouse_x >448 and cur_mouse_x<490 and cur_mouse_y>443 and cur_mouse_y<466  and get_yaoshi1 == false)then
 
                     --打开纸团
                     get_yaoshi1 = true
@@ -484,6 +738,37 @@ function love.update()
                     --使用鱼干
                     istip = false
                     xiaoyugan_using = true
+                    xiaoyugan_checking =false
+                    love.timer.sleep(0.5)
+                    elseif (ipad_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用ipad
+                    istip = false
+                    ipad_using = true
+                    ipad_checking=false
+                    love.timer.sleep(0.5)
+                  elseif (cd_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用CD
+                    istip = false
+                    cd_using = true
+                    cd_checking=false
+                    love.timer.sleep(0.5)
+                   elseif (chengyigan_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用撑衣干
+                    istip = false
+                    chengyigan_using = true
+                    chengyigan_checking =false
+                    love.timer.sleep(0.5)
+                   elseif (camara_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用照相机
+                    istip = false
+                    camara_using = true
+                    camara_checking =false
+                    love.timer.sleep(0.5)
+                     elseif (zhaopian_checking ==true and cur_mouse_x >435 and cur_mouse_x<487 and cur_mouse_y>424 and cur_mouse_y<446)then
+                    --使用照相机
+                    istip = false
+                    zhaopian_using = true
+                    zhaopian_checking =false
                     love.timer.sleep(0.5)
                    else
 
@@ -505,8 +790,11 @@ function love.update()
         t1,t2 = math.modf(cur_mouse_x/128);
         if (t1<1 and item_index>0) then
             item_index=item_index-1
+            love.timer.sleep(0.2)
+
         elseif (t1>6 and item_index<items_len-6 and items_len>6) then
             item_index=item_index+1
+            love.timer.sleep(0.2)
         else
             citem_index = item_index+t1
             --获取当前点击的物品名称
@@ -521,7 +809,7 @@ function love.update()
                 istip = true
                 yaoshi1_checking = true
                 love.timer.sleep(0.5)
-            elseif(click_item_name=='taotao') then
+            elseif(click_item_name=='taotao' and is_xiaoyugan_taked==false) then
                 ctip = tips17
                 istip = true
                 taotao_checking = true
@@ -540,6 +828,31 @@ function love.update()
                 ctip = tips20
                 istip = true
                 xiaoyugan_checking = true
+                love.timer.sleep(0.5)
+            elseif(click_item_name=='ipad') then
+                ctip = tips27
+                istip = true
+                ipad_checking = true
+                love.timer.sleep(0.5)
+             elseif(click_item_name=='cd' and cd_using ==false) then
+                ctip = tips30
+                istip = true
+                cd_checking = true
+                love.timer.sleep(0.5)
+            elseif(click_item_name=='chengyigan') then
+                ctip = tips22
+                istip = true
+                chengyigan_checking = true
+                love.timer.sleep(0.5)
+            elseif(click_item_name=='camara') then
+                ctip = tips23
+                istip = true
+                camara_checking = true
+                love.timer.sleep(0.5)
+            elseif(click_item_name=='zhaopian') then
+                ctip = tips24
+                istip = true
+                zhaopian_checking = true
                 love.timer.sleep(0.5)
             end
         end
@@ -584,6 +897,15 @@ end
 
 --画布
 function love.draw()
+    --提示音
+    if(istip==ture)then
+        love.audio.play(tips_sound)
+    end
+    --游戏通关
+    if (cur_scene == 'over') then
+        love.audio.play(over_sound)
+        love.graphics.draw(over_img, 0, 0)
+    end
 
     --位于主界面
     if (cur_scene == 'title') then
@@ -593,6 +915,7 @@ function love.draw()
 
     --位于入场界面
     if (cur_scene == 'brief') then
+        love.audio.play(brief_sound)
         love.graphics.draw(brief_img, 0, brfy)
     end
 
@@ -617,12 +940,21 @@ function love.draw()
 
     --进入房间
     if (cur_scene == 'room') then
+        if(cd_in==true and istvopen==true)then
+                love.audio.play(liangjian_sound)
+        end
         love.graphics.draw(room_img, 0, 0)
         --房间背景
 
         if (istvopen==true) then
-            love.graphics.print('SONY',500,50,0,5,2)
+            if(cd_in ==false)then
+                 love.graphics.print('SONY',500,50,0,5,2)
             --打开电视时候显示索尼图标
+            else
+            love.graphics.draw(tv_img, 494, 43)
+                --电视节目 亮剑播放
+                end
+
         end
         if (is_paper_taked==false) then
             love.graphics.draw(i_paper,200,300)
@@ -635,6 +967,8 @@ function love.draw()
 
      --进入厕所
     if (cur_scene == 'toilet') then
+        love.audio.play(toilet_sound)
+
         if (is_yaoshi2_taked ==false)then
             love.graphics.draw(toilet_img, 0, 0)
         else
@@ -646,6 +980,8 @@ function love.draw()
 
         --进入阳台
     if (cur_scene == 'yangtai') then
+        love.audio.play(yangtai_sound)
+
         if (is_chengyigan_taked ==false)then
             love.graphics.draw(yangtai_img, 0, 0)
         else
@@ -699,6 +1035,8 @@ function love.draw()
                         cimg = i_xiaoyugan
                     elseif (citem=='cd')then
                         cimg = i_cd
+                    elseif (citem=='zhaopian')then
+                        cimg = i_yunlong
                     end
                     love.graphics.draw(cimg, draw_index*128,636)
                     draw_index = draw_index+1
@@ -717,6 +1055,16 @@ function love.draw()
              love.graphics.draw(i_yaoshi2,cur_mouse_x,cur_mouse_y)
          elseif (xiaoyugan_using ==true) then
              love.graphics.draw(i_xiaoyugan,cur_mouse_x,cur_mouse_y)
+         elseif (ipad_using ==true) then
+             love.graphics.draw(i_ipad,cur_mouse_x,cur_mouse_y)
+         elseif (cd_using ==true) then
+             love.graphics.draw(i_cd,cur_mouse_x,cur_mouse_y)
+         elseif (chengyigan_using ==true) then
+             love.graphics.draw(i_chengyigan,cur_mouse_x,cur_mouse_y)
+         elseif (camara_using ==true) then
+             love.graphics.draw(i_camara,cur_mouse_x,cur_mouse_y)
+         elseif (zhaopian_using ==true) then
+             love.graphics.draw(i_yunlong,cur_mouse_x,cur_mouse_y)
          end
     end
 
