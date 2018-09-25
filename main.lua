@@ -1,4 +1,3 @@
-
 --预加载资源
 function love.load()
     title_img = love.graphics.newImage("images/rs1title.jpg")
